@@ -1,0 +1,2 @@
+Soma dos positivos: 6091
+Soma dos negativos: -4430
