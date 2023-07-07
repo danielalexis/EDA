@@ -67,9 +67,11 @@ Bonito
 Forte
 Inteligente
 Paciente
+Paciente
 Amável
 Curioso
 Criativo
+Generoso
 Trabalho
 Estudo
 Escola
@@ -90,6 +92,8 @@ Lago
 Solitário
 Calmo
 Barulhento
+Computador
+Internet
 Pequeno
 Grande
 Antigo
