@@ -18,7 +18,7 @@ void inserirContacto(FILE *file) {
     scanf("%d", &contacto.mes);
     printf("Ano: ");
     scanf("%d", &contacto.ano);
-    fprintf(file, "%s %d %d %d\n", contacto.nome, contacto.dia, contacto.mes, contacto.ano);
+    fwrite(&contacto, sizeof(Contacto), 1, file);
     return;
 }
 
@@ -27,22 +27,21 @@ void removerContacto(FILE *file) {
     char nome[50];
     printf("Nome: ");
     scanf("%s", nome);
-    FILE *fileTemp = fopen("temp.txt", "w");
+    FILE *fileTemp = fopen("temp.bin", "wb");
     if (fileTemp == NULL) {
         printf("Erro ao abrir o ficheiro.\n");
         return;
     }
-    char nomeTemp[50];
-    int dia, mes, ano;
-    while (fscanf(file, "%s %d %d %d", nomeTemp, &dia, &mes, &ano) != EOF) {
-        if (strcmp(nome, nomeTemp) != 0) {
-            fprintf(fileTemp, "%s %d %d %d\n", nomeTemp, dia, mes, ano);
+    Contacto contacto;
+    while (fread(&contacto, sizeof(Contacto), 1, file) == 1) {
+        if (strcmp(nome, contacto.nome) != 0) {
+            fwrite(&contacto, sizeof(Contacto), 1, fileTemp);
         }
     }
     fclose(file);
     fclose(fileTemp);
-    remove("contactos.txt");
-    rename("temp.txt", "contactos.txt");
+    remove("contactos.bin");
+    rename("temp.bin", "contactos.bin");
     return;
 }
 
@@ -51,11 +50,10 @@ void pesquisar_por_nome(FILE *file) {
     char nome[50];
     printf("Nome: ");
     scanf("%s", nome);
-    char nomeTemp[50];
-    int dia, mes, ano;
-    while (fscanf(file, "%s %d %d %d", nomeTemp, &dia, &mes, &ano) != EOF) {
-        if (strcmp(nome, nomeTemp) == 0) {
-            printf("%s %d %d %d\n", nomeTemp, dia, mes, ano);
+    Contacto contacto;
+    while (fread(&contacto, sizeof(Contacto), 1, file) == 1) {
+        if (strcmp(nome, contacto.nome) == 0) {
+            printf("%s %d %d %d\n", contacto.nome, contacto.dia, contacto.mes, contacto.ano);
         }
     }
     return;
@@ -64,7 +62,7 @@ void pesquisar_por_nome(FILE *file) {
 void listar_contactos(FILE *file) {
     fseek(file, 0, SEEK_SET);
     Contacto contacto;
-    while (fscanf(file, "%s %d %d %d", contacto.nome, &contacto.dia, &contacto.mes, &contacto.ano) != EOF) {
+    while (fread(&contacto, sizeof(Contacto), 1, file) == 1) {
         printf("%s %d/%d/%d\n", contacto.nome, contacto.dia, contacto.mes, contacto.ano);
     }
     return;
@@ -77,7 +75,7 @@ void listar_letra_inicial(FILE *file) {
     printf("Letra: ");
     scanf(" %c", &letra);
     
-    while (fscanf(file, "%s %d %d %d", contacto.nome, &contacto.dia, &contacto.mes, &contacto.ano) != EOF) {
+    while (fread(&contacto, sizeof(Contacto), 1, file) == 1) {
         if (contacto.nome[0] == letra) {
             printf("%s %d/%d/%d\n", contacto.nome, contacto.dia, contacto.mes, contacto.ano);
         }
@@ -86,13 +84,13 @@ void listar_letra_inicial(FILE *file) {
 }
 
 void listar_por_mes(FILE *file) {
-        fseek(file, 0, SEEK_SET);
+    fseek(file, 0, SEEK_SET);
     int mes;
     Contacto contacto;
     printf("Mês: ");
     scanf("%d", &mes);
     
-    while (fscanf(file, "%s %d %d %d", contacto.nome, &contacto.dia, &contacto.mes, &contacto.ano) != EOF) {
+    while (fread(&contacto, sizeof(Contacto), 1, file) == 1) {
         if (contacto.mes == mes) {
             printf("%s %d %d %d\n", contacto.nome, contacto.dia, contacto.mes, contacto.ano);
         }
@@ -101,7 +99,14 @@ void listar_por_mes(FILE *file) {
 }
 
 void main() {
-    FILE *file = fopen("contactos.txt", "w+");
+    FILE *file = fopen("contactos.bin", "rb+");
+    if (file == NULL) {
+        file = fopen("contactos.bin", "wb+");
+        if (file == NULL) {
+            printf("Erro ao criar o ficheiro.\n");
+            return 0;
+        }
+    }
     while (1) {
         printf("--------------------------------------\n");
         printf("1 - Inserir Contacto\n");
@@ -123,7 +128,6 @@ void main() {
             break;
         case 2:
             removerContacto(file);
-            file = fopen("contactos.txt", "w+");
             break;
         case 3:
             pesquisar_por_nome(file);
