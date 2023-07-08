@@ -3,20 +3,20 @@
 
 
 
-int main() {
+void main() {
     FILE *fileTxt, *fileBin, *fileBinPositivos;
     int num;
 
     fileTxt = fopen("Inteiros.txt", "r");
     if (fileTxt == NULL) {
         printf("Erro ao abrir o ficheiro.\n");
-        return 1;
+        return;
     }
     
     fileBin = fopen("Inteiros.bin", "wb");
     if (fileBin == NULL) {
         printf("Erro ao criar o ficheiro.\n");
-        return 1;
+        return;
     }
     
     while (fscanf(fileTxt, "%d", &num) == 1) {
@@ -29,7 +29,7 @@ int main() {
     fileBin = fopen("Inteiros.bin", "rb");
     if (fileBin == NULL) {
         printf("Erro ao abrir o ficheiro\n");
-        return 1;
+        return;
     }
     
     printf("Ficheiro binario:\n");
@@ -42,13 +42,13 @@ int main() {
     fileBin = fopen("Inteiros.bin", "rb");
     if (fileBin == NULL) {
         printf("Erro ao abrir o ficheiro\n");
-        return 1;
+        return;
     }
     
     fileBinPositivos = fopen("InteirosPositivos.bin", "wb");
     if (fileBinPositivos == NULL) {
         printf("Erro ao criar o ficheiro.\n");
-        return 1;
+        return;
     }
     
     while (fread(&num, sizeof(int), 1, fileBin) == 1) {
@@ -63,7 +63,7 @@ int main() {
     fileBinPositivos = fopen("InteirosPositivos.bin", "rb");
     if (fileBinPositivos == NULL) {
         printf("Erro ao abrir o ficheiro\n");
-        return 1;
+        return;
     }
     
     printf("ints positivos (binário):\n");
@@ -73,5 +73,5 @@ int main() {
     
     fclose(fileBinPositivos);
     
-    return 0;
+    return;
 }

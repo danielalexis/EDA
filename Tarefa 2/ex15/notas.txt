@@ -1,0 +1,6 @@
+Nome da turma: Marrecos
+
+Alunos e suas medias:
+Aluno: Daniel
+Media: 18.00
+
