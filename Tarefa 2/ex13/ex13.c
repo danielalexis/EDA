@@ -27,7 +27,7 @@ void main() {
         return;
     }
 
-    while (fscanf(fileOriginal, "%d\n", &aluno.BI) == 1) {
+    while (fscanf(fileOriginal, "%d\n", &aluno.BI) != EOF) {
         fgets(aluno.nome, sizeof(aluno.nome), fileOriginal);
         aluno.nome[strcspn(aluno.nome, "\n")] = '\0'; 
         fscanf(fileOriginal, "%f\n", &aluno.altura);
