@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.sql": "sql",
+        "limits": "c",
+        "stdlib.h": "c"
+    }
+}
